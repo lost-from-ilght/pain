@@ -1,0 +1,978 @@
+{
+  "scenarios": [
+    {
+      "scenarioId": "1-A",
+      "group": "User Blocks - Listing",
+      "title": "View All User Blocks Globally (with filters)",
+      "description": "GET /user-blocks/listUserBlocks - Shows a list of all blocks between users. You can filter by scope (where the block applies), type of block, whether it's permanent, and use pagination to see more results.",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listUserBlocks",
+      "checklistItems": [
+        "Test pagination works correctly (using limit + nextToken)",
+        "Verify filtering works properly for from/to user, scope, flag, and permanent status",
+        "The number of blocks shown should match the reported count"
+      ],
+      "inputFields": [
+        {
+          "id": "scope",
+          "label": "Where the block applies (Scope)",
+          "type": "select",
+          "options": [
+            { "value": "", "text": "Any / Global" },
+            { "value": "feed", "text": "Feed (posts & comments)" },
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ]
+        },
+        {
+          "id": "flag",
+          "label": "Block Type / Reason (flag)",
+          "type": "text",
+          "placeholder": "e.g. manual, spam, harassment"
+        },
+        {
+          "id": "is_permanent",
+          "label": "Is this a permanent block?",
+          "type": "select",
+          "options": [
+            { "value": "", "text": "Any (permanent or temporary)" },
+            { "value": "true", "text": "Yes – Permanent" },
+            { "value": "false", "text": "No – Temporary" }
+          ]
+        },
+        {
+          "id": "limit",
+          "label": "Number of results per page",
+          "type": "text",
+          "placeholder": "20",
+          "value": "20",
+          "inputMode": "numeric"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next page token (for loading more)",
+          "type": "text",
+          "placeholder": "Paste token from previous response..."
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "1-B",
+      "parent": "1-A",
+      "title": "See Blocks in a Specific Scope For Users-User blocks",
+      "description": "GET /user-blocks/listUserBlocks - Find user-to-user blocks that apply only in a specific area (like Feed or Private Messages) with optional user filters.",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listUserBlocks",
+      "checklistItems": [
+        "Every block in the results should match the chosen scope (area)"
+      ],
+      "inputFields": [
+        {
+          "id": "from",
+          "label": "Blocked by (From User ID)",
+          "type": "text",
+          "placeholder": "user123"
+        },
+        {
+          "id": "to",
+          "label": "Blocked user (To User ID)",
+          "type": "text",
+          "placeholder": "user456"
+        },
+        {
+          "id": "scope",
+          "label": "Where the block applies (Scope)",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "feed", "text": "Feed (posts & comments)" },
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ],
+          "value": "private_chat"
+        },
+        {
+          "id": "limit",
+          "label": "Number of results per page",
+          "type": "text",
+          "placeholder": "20",
+          "value": "20",
+          "inputMode": "numeric"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "1-C",
+      "parent": "1-A",
+      "title": "See Who Has Blocked a Specific User",
+      "description": "GET /user-blocks/listUserBlocks - Shows all users who have blocked a particular person in a chosen area (Feed or DMs).",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listUserBlocks",
+      "checklistItems": [
+        "All results should match the selected scope/area",
+        "Every block should list the requested user as the blocked person (to)"
+      ],
+      "inputFields": [
+        {
+          "id": "to",
+          "label": "Blocked User (the person who was blocked)",
+          "type": "text",
+          "required": true,
+          "placeholder": "user456"
+        },
+        {
+          "id": "scope",
+          "label": "Where the block applies (Scope)",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "feed", "text": "Feed (posts & comments)" },
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ],
+          "value": "private_chat"
+        },
+        {
+          "id": "limit",
+          "label": "Number of results per page",
+          "type": "text",
+          "placeholder": "20",
+          "value": "20",
+          "inputMode": "numeric"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+    {
+      "scenarioId": "1-D",
+      "parent": "1-A",
+      "title": "See Who a Specific User Has Blocked",
+      "description": "GET /user-blocks/listUserBlocks - Shows all users who have been blocked  by a particular person in a chosen area (Feed or DMs).",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listUserBlocks",
+      "checklistItems": [
+        "All results should match the selected scope/area",
+        "Every block should list the requested user as the blocked person (to)"
+      ],
+      "inputFields": [
+        {
+          "id": "from",
+          "label": "from User (the person who has blocked others)",
+          "type": "text",
+          "required": true,
+          "placeholder": "user456"
+        },
+        {
+          "id": "scope",
+          "label": "Where the block applies (Scope)",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "", "text": "global (all)" },
+            { "value": "feed", "text": "Feed (posts & comments)" },
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ],
+          "value": "private_chat"
+        },
+        {
+          "id": "limit",
+          "label": "Number of results per page",
+          "type": "text",
+          "placeholder": "20",
+          "value": "20",
+          "inputMode": "numeric"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "2-A",
+      "group": "User Blocks - Actions",
+      "title": "Block  User to User with Scope",
+      "description": "POST /user-blocks/blockUser - Lets one user permanently/temporarily block another user in a chosen area (like Feed or Private Messages).",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/blockUser",
+      "requestPayload": {
+        "from": "user_a",
+        "to": "user_b",
+        "scope": "feed",
+        "is_permanent": true,
+        "expires_at": null,
+        "testing": true
+      },
+      "checklistItems": [
+        "The block should only apply in the selected area (scope)"
+      ],
+      "inputFields": [
+        {
+          "id": "from",
+          "label": "Who is doing the blocking (From)",
+          "type": "text",
+          "required": true,
+          "value": "user_a"
+        },
+        {
+          "id": "to",
+          "label": "Who is being blocked (To)",
+          "type": "text",
+          "required": true,
+          "value": "user_b"
+        },
+        {
+          "id": "scope",
+          "label": "Where should the block apply?",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "", "text": "global (all)" },
+            { "value": "feed", "text": "Feed (posts, comments, timeline)" },
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ],
+          "value": "feed"
+        },
+        {
+          "id": "is_permanent",
+          "label": "Is this a permanent block?",
+          "type": "select",
+          "options": [
+            { "value": "false", "text": "No – Temporary" },
+            { "value": "true", "text": "Yes – Permanent" }
+          ],
+          "value":false
+        },
+        {
+          "id": "expires_at",
+          "label": "Duration of the block (in seconds)",
+          "type": "text",
+          "required": false,
+          "value": "86400",
+          "placeholder": "e.g. 86400 = 24 hours",
+          "inputMode": "numeric"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "2-B",
+      "parent": "2-A",
+      "title": "Block System to User with Scope",
+      "description": "POST /user-blocks/blockUser - Create a  platform-level (system) block against a user in a specific area.",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/blockUser",
+      "requestPayload": {
+        "from": "system",
+        "to": "user_b",
+        "scope": "private_chat",
+        "is_permanent": false,
+        "expires_at": 86400,
+        "testing": true
+      },
+      "inputFields": [
+        {
+          "id": "from",
+          "label": "Block creator (usually 'system')",
+          "type": "text",
+          "required": true,
+          "value": "system"
+        },
+        {
+          "id": "to",
+          "label": "User being blocked",
+          "type": "text",
+          "required": true,
+          "value": "user_b"
+        },
+        {
+          "id": "scope",
+          "label": "Where should the block apply?",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ],
+          "value": "private_chat"
+        },
+        {
+          "id": "is_permanent",
+          "label": "Is this a permanent block?",
+          "type": "select",
+          "options": [
+            { "value": "false", "text": "No – Temporary" },
+            { "value": "true", "text": "Yes – Permanent" }
+          ],
+          "value":false
+        },
+        {
+          "id": "expires_at",
+          "label": "Duration of the block (in seconds)",
+          "type": "text",
+          "required": false,
+          "value": "86400",
+          "placeholder": "e.g. 86400 = 24 hours",
+          "inputMode": "numeric"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "3-A",
+      "group": "User Blocks - Actions",
+      "title": "Unblock a User (in Scope)",
+      "description": "POST /user-blocks/unblockUser - Remove a block between two users in one specific scope (Feed or DMs).",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/unblockUser",
+      "requestPayload": {
+        "from": "user_a",
+        "to": "user_b",
+        "scope": "feed",
+        "testing": true
+      },
+      "checklistItems": [
+        "Only the selected area (scope) should lose the block — others remain if they exist"
+      ],
+      "inputFields": [
+        {
+          "id": "from",
+          "label": "Who originally blocked (From)",
+          "type": "text",
+          "required": true,
+          "value": "user_a"
+        },
+        {
+          "id": "to",
+          "label": "Who was blocked (To)",
+          "type": "text",
+          "required": true,
+          "value": "user_b"
+        },
+        {
+          "id": "scope",
+          "label": "Which scope to unblock in?",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "feed", "text": "Feed (posts, comments, timeline)" },
+            { "value": "private_chat", "text": "Private Messages (DMs)" }
+          ],
+          "value": "feed"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "3-B",
+      "parent": "3-A",
+      "title": "Try to Unblock Someone (When No Block Exists)",
+      "description": "POST /user-blocks/unblockUser - Attempt to remove a block that doesn't exist. Should complete safely without error.",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/unblockUser",
+      "requestPayload": {
+        "from": "user_x",
+        "to": "user_y",
+        "scope": "feed",
+        "testing": true
+      },
+      "checklistItems": [
+        "The request should succeed safely (idempotent) — usually returns 200 or 404, never 500"
+      ],
+      "inputFields": [
+        {
+          "id": "from",
+          "label": "Who would have blocked (From)",
+          "type": "text",
+          "required": true,
+          "value": "user_x"
+        },
+        {
+          "id": "to",
+          "label": "Who would have been blocked (To)",
+          "type": "text",
+          "required": true,
+          "value": "user_y"
+        },
+        {
+          "id": "scope",
+          "label": "Scope of the supposed block",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "feed", "text": "Feed (posts, comments, timeline)" }
+          ],
+          "value": "feed"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "4",
+      "group": "Get all type of Blocks for user - Listing",
+      "title": "View All Current Active Blocks Affecting a User",
+      "description": "GET /user-blocks/getBlocksForUser - Shows all active blocks where someone has blocked a specific user. By default shows only active blocks (not deleted ones).",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/getBlocksForUser",
+      "checklistItems": [
+        "By default only shows active (non-deleted) blocks",
+        "When show_deleted=true is used, soft-deleted blocks should also appear"
+      ],
+      "inputFields": [
+        {
+          "id": "to",
+          "label": "Blocked User (the person who was blocked)",
+          "type": "text",
+          "required": true,
+          "placeholder": "user456"
+        },
+        {
+          "id": "show_deleted",
+          "label": "Include deleted/soft-deleted blocks?",
+          "type": "select",
+          "options": [
+            { "value": "false", "text": "No – only active blocks (default)" },
+            { "value": "true", "text": "Yes – show deleted ones too" }
+          ],
+          "value": "false"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "5",
+      "group": "User Blocks - Batch",
+      "title": "Batch Check: Are Multiple Users Blocking Each Other?",
+      "description": "POST /user-blocks/batchCheckUserBlocks - Efficiently check block status for several user pairs at once (great for feeds, lists, etc.).",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/batchCheckUserBlocks",
+      "requestPayload": {
+        "blocks": [
+          { "from": "user_a", "to": "user_b", "scope": "feed" },
+          { "from": "user_c", "to": "user_d", "scope": "private_chat" }
+        ]
+      },
+      "checklistItems": [
+        "Should return an error (400) if 'blocks' is not a proper list/array",
+        "Each result should match what a single check would return"
+      ],
+      "inputFields": []
+    },
+
+    {
+      "scenarioId": "6-A",
+      "group": "System Blocks",
+      "title": "List System Blocks (all/global)",
+      "description": "GET /user-blocks/listSystemBlocks - List all system-level blocks (IP/Email)",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listSystemBlocks",
+      "inputFields": [
+        {
+          "id": "ip",
+          "label": "IP",
+          "type": "text",
+          "placeholder": "203.0.113.10"
+        },
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "options": [
+            { "value": "", "text": "Global" },
+            { "value": "auth", "text": "Auth" },
+            { "value": "feed", "text": "Feed" },
+            { "value": "private_chat", "text": "Private Chat" }
+          ]
+        },
+        {
+          "id": "is_permanent",
+          "label": "is_permanent",
+          "type": "select",
+          "options": [
+            { "value": "", "text": "(any)" },
+            { "value": "true", "text": "Yes" },
+            { "value": "false", "text": "No" }
+          ]
+        },
+        {
+          "id": "limit",
+          "label": "Limit",
+          "type": "text",
+          "value": "20",
+          "placeholder": "20"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "6-B",
+      "parent": "6-A",
+      "title": "List System Blocks (scoped)",
+      "description": "GET /user-blocks/listSystemBlocks - List system blocks filtered by specific scope",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listSystemBlocks",
+      "checklistItems": ["All returned items should match the requested scope"],
+      "inputFields": [
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "auth", "text": "Auth" },
+            { "value": "feed", "text": "Feed" },
+            { "value": "private_chat", "text": "Private Chat" }
+          ],
+          "value": "auth"
+        },
+        {
+          "id": "limit",
+          "label": "Limit",
+          "type": "text",
+          "value": "20",
+          "placeholder": "20",
+          "inputMode": "numeric"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+    
+    {
+      "scenarioId": "6-C",
+      "parent": "6-A",
+      "title": "List System Blocks  for user by identifier (scoped)",
+      "description": "GET /user-blocks/listSystemBlocks - List system blocks filtered by specific scope",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listSystemBlocks",
+      "checklistItems": ["All returned items should match the requested scope"],
+      "inputFields": [
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "auth", "text": "Auth" },
+            { "value": "feed", "text": "Feed" },
+            { "value": "private_chat", "text": "Private Chat" }
+          ],
+          "value": "auth"
+        },
+        {
+          "id": "type",
+          "label": "Identifier Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "ip", "text": "IP Address" },
+            { "value": "email", "text": "Email Address" },
+            { "value": "app", "text": "User ID" }
+          ],
+          "value": "test@gmail.com"
+        },
+        {
+          "id": "identifier",
+          "label": "Identifier",
+          "type": "text",
+          "value": "test@gmail.com"
+        },
+        {
+          "id": "limit",
+          "label": "Limit",
+          "type": "text",
+          "value": "20",
+          "placeholder": "20",
+          "inputMode": "numeric"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "7",
+      "group": "System Blocks - IP",
+      "title": "Block IP (permanent/temporary)",
+      "description": "POST /user-blocks/blockIP - is_permanent IP block in global scope",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/blockIP",
+      "requestPayload": {
+        "ip": "203.0.113.10",
+        "scope": "global",
+        "is_permanent": true,
+        "expires_at": null,
+        "testing": true
+      },
+      "checklistItems": [
+        "Block should be is_permanent and only apply to global scope"
+      ],
+      "inputFields": [
+        {
+          "id": "ip",
+          "label": "IP Address",
+          "type": "text",
+          "required": true,
+          "value": "203.0.113.10"
+        },
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "required": true,
+          "options": [{ "value": "global", "text": "Global" }],
+          "value": "global"
+        },
+        {
+          "id": "is_permanent",
+          "label": "Is this a permanent block?",
+          "type": "select",
+          "options": [
+            { "value": "false", "text": "No – Temporary" },
+            { "value": "true", "text": "Yes – Permanent" }
+          ],
+          "value":false
+        },
+        {
+          "id": "expires_at",
+          "label": "Duration of the block (in seconds)",
+          "type": "text",
+          "required": false,
+          "value": "86400",
+          "placeholder": "e.g. 86400 = 24 hours",
+          "inputMode": "numeric"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "8",
+      "group": "System Blocks - IP Checks",
+      "title": "Is IP Blocked? (global)",
+      "description": "GET /user-blocks/isIPBlocked - Check IP block status in global scope",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/isIPBlocked",
+      "checklistItems": [
+        "Result should reflect block status in requested scope"
+      ],
+      "inputFields": [
+        {
+          "id": "ip",
+          "label": "IP Address",
+          "type": "text",
+          "required": true,
+          "value": "203.0.113.10"
+        },
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "required": true,
+          "value": "global",
+          "options": [{ "value": "global", "text": "Global" }]
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "9",
+      "group": "System Blocks - Email",
+      "title": "Block Email (permanent/temporary)",
+      "description": "POST /user-blocks/blockEmail - email block in global scope temporary/permanent",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/blockEmail",
+      "requestPayload": {
+        "email": "test.blocked@example.com",
+        "scope": "global",
+        "is_permanent": false,
+        "expires_at": null,
+        "testing": true
+      },
+      "checklistItems": [
+        "Email should be blocked permanent/temporarily in global scope"
+      ],
+      "inputFields": [
+        {
+          "id": "email",
+          "label": "Email Address",
+          "type": "text",
+          "required": true,
+          "value": "test.blocked@example.com"
+        },
+
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "required": true,
+          "value": "global",
+          "options": [{ "value": "global", "text": "Global" }]
+        },
+       {
+          "id": "is_permanent",
+          "label": "Is this a permanent block?",
+          "type": "select",
+          "options": [
+            { "value": "false", "text": "No – Temporary" },
+            { "value": "true", "text": "Yes – Permanent" }
+          ],
+          "value":false
+        },
+        {
+          "id": "expires_at",
+          "label": "Duration of the block (in seconds)",
+          "type": "text",
+          "required": false,
+          "value": "86400",
+          "placeholder": "e.g. 86400 = 24 hours",
+          "inputMode": "numeric"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "10",
+      "parent": "9",
+      "title": "Is Email Blocked?",
+      "description": "GET /user-blocks/isEmailBlocked - Check email block status in scope",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/isEmailBlocked",
+      "inputFields": [
+        {
+          "id": "email",
+          "label": "Email Address",
+          "type": "text",
+          "required": true,
+          "value": "test.blocked@example.com"
+        },
+        {
+          "id": "scope",
+          "label": "Scope",
+          "type": "select",
+          "required": true,
+          "value": "global",
+          "options": [{ "value": "global", "text": "Global" }]
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "11",
+      "group": "Manual Actions",
+      "title": "List Manual Actions (paginated)",
+      "description": "GET /user-blocks/listManualActions - List all manual actions with filters",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/listManualActions",
+      "checklistItems": [
+        "Check pagination (limit/nextToken)",
+        "Validate filtering by userId/adminId/flagKey"
+      ],
+      "inputFields": [
+        {
+          "id": "userId",
+          "label": "User ID",
+          "type": "text",
+          "placeholder": "user_sus_1"
+        },
+        {
+          "id": "adminId",
+          "label": "Admin ID",
+          "type": "text",
+          "placeholder": "admin_1"
+        },
+        {
+          "id": "flagKey",
+          "label": "Flag Key",
+          "type": "text",
+          "placeholder": "warning_low"
+        },
+        {
+          "id": "limit",
+          "label": "Limit",
+          "type": "text",
+          "value": "20",
+          "placeholder": "20"
+        },
+        {
+          "id": "nextToken",
+          "label": "Next Token",
+          "type": "text",
+          "value": "",
+          "placeholder": ""
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "12",
+      "group": "Manual Actions",
+      "title": "Suspend User",
+      "description": "POST /user-blocks/suspendUser - Suspend a user",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/suspendUser",
+      "requestPayload": {
+        "userId": "user_sus_1",
+        "reason": "tos_violation",
+        "adminId": "admin_1",
+        "flag": "manual",
+        "note": "Severe violation - investigate",
+        "testing": true
+      },
+      "checklistItems": [
+        "Required fields validation",
+        "Suspension should be recorded with timestamp"
+      ],
+      "inputFields": [
+        {
+          "id": "userId",
+          "label": "User ID",
+          "type": "text",
+          "required": true,
+          "value": "user_sus_1"
+        },
+        {
+          "id": "reason",
+          "label": "Reason",
+          "type": "text",
+          "required": true,
+          "value": "tos_violation"
+        },
+        {
+          "id": "adminId",
+          "label": "Admin ID",
+          "type": "text",
+          "required": true,
+          "value": "admin_1"
+        },
+        { "id": "flag", "label": "Flag", "type": "text", "value": "manual" },
+        {
+          "id": "note",
+          "label": "Note",
+          "type": "text",
+          "value": "Severe violation"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "13",
+      "group": "Manual Actions",
+      "title": "Unsuspend User",
+      "description": "POST /user-blocks/unsuspendUser - Remove suspension from user",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/unsuspendUser",
+      "requestPayload": { "userId": "user_sus_1", "testing": true },
+      "checklistItems": ["User should no longer be suspended"],
+      "inputFields": [
+        {
+          "id": "userId",
+          "label": "User ID",
+          "type": "text",
+          "required": true,
+          "value": "user_sus_1"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "14",
+      "group": "Manual Actions",
+      "title": "Is User Suspended?",
+      "description": "GET /user-blocks/isUserSuspended - Check suspension status",
+      "apiMethod": "GET",
+      "apiEndpoint": "/user-blocks/isUserSuspended",
+      "inputFields": [
+        {
+          "id": "userId",
+          "label": "User ID",
+          "type": "text",
+          "required": true,
+          "value": "user_sus_1"
+        }
+      ]
+    },
+
+    {
+      "scenarioId": "15",
+      "group": "Manual Actions",
+      "title": "Warn User",
+      "description": "POST /user-blocks/warnUser - Issue a warning to user",
+      "apiMethod": "POST",
+      "apiEndpoint": "/user-blocks/warnUser",
+      "requestPayload": {
+        "userId": "user_warn_1",
+        "flagKey": "warning_low",
+        "adminId": "admin_1",
+        "note": "First warning - inappropriate content",
+        "testing": true
+      },
+      "inputFields": [
+        {
+          "id": "userId",
+          "label": "User ID",
+          "type": "text",
+          "required": true,
+          "value": "user_warn_1"
+        },
+        {
+          "id": "flagKey",
+          "label": "Flag Key",
+          "type": "text",
+          "required": true,
+          "value": "warning_low"
+        },
+        {
+          "id": "adminId",
+          "label": "Admin ID",
+          "type": "text",
+          "required": true,
+          "value": "admin_1"
+        },
+        {
+          "id": "note",
+          "label": "Note",
+          "type": "text",
+          "value": "First warning"
+        }
+      ]
+    }
+  ],
+
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-01-10",
+    "description": "Edge test scenarios for user-block related endpoints"
+  }
+}
