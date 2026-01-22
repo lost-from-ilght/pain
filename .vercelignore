@@ -1,0 +1,9 @@
+# Ignore formatting tools
+formatting/
+
+# Ignore documentation (optional - you may want to keep docs)
+# docs/
+
+# Ignore development files
+*.bat
+*.py
